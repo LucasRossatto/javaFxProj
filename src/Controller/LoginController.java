@@ -15,26 +15,26 @@ public class LoginController {
 
 	@FXML
 	private TextField username;
-	
+
 	@FXML
 	private TextField password;
-	
+
 	public Stage primaryStage;
-	
+
 	public void entrar() {
 		System.out.println("Login realizado com sucesso");
-		if(username.getText().equals("admin") && password.getText().equals("admin")) {
+		if (username.getText().equals("admin") && password.getText().equals("admin")) {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dashboard.fxml"));
 				StackPane root = loader.load();
 				Scene scene = new Scene(root, 600, 400);
 				Stage currentStage = (Stage) username.getScene().getWindow();
 				currentStage.close();
-				
+
 				currentStage.setScene(scene);
 				currentStage.setTitle("DashBoard");
 				currentStage.show();
-			} catch(IOException e){
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			System.out.println("Realizando login");
@@ -42,7 +42,7 @@ public class LoginController {
 			mensagemDeErro();
 		}
 	}
-	
+
 	public void mensagemDeErro() {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle("Sua senha está incorreta");

@@ -11,33 +11,32 @@ public class ViagemController {
 
 	@FXML
 	private TableView<Fly> tableView;
-	
+
 	@FXML
 	private TableColumn<Fly, String> cNome;
-	
+
 	@FXML
 	private TableColumn<Fly, String> cInicioVoo;
-	
+
 	@FXML
 	private TableColumn<Fly, String> cFimVoo;
-	
-	
-	@FXML 
+
+	@FXML
 	private TextField nome;
-	
-	@FXML 
+
+	@FXML
 	private TextField InicioVoo;
-	
+
 	@FXML
 	private TextField FimVoo;
-	
+
 	@FXML
 	public void initialize() {
 		repoViagem = new ViagensRepository();
 	}
-	
+
 	private ViagensRepository repoViagem;
-	
+
 	public void cadastrar() {
 		Fly fly = new Fly();
 		fly.setNome(nome.getText());
@@ -45,13 +44,13 @@ public class ViagemController {
 		fly.setFimVoo(FimVoo.getText());
 		repoViagem.addFly(fly);
 	}
-	
+
 	public void ClearFields() {
 		nome.clear();
 		InicioVoo.clear();
 		FimVoo.clear();
 	}
-	
+
 	public void limpar() {
 		ClearFields();
 	}
