@@ -16,8 +16,8 @@ public class ViagensRepository {
 	private List<Fly> flies;
 	private File database;
 
-	public void FliesRepository() {
-		this.database = new File("database-users.txt");
+	public ViagensRepository() {
+		this.database = new File("databaseflys.txt");
 		this.flies = new ArrayList<>();
 		loadFLies();
 	}
@@ -37,8 +37,21 @@ public class ViagensRepository {
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Arquivo não encontrado, criando um novo!");
+			createFileIfNotExists();
 		}
 	}
+	
+	private void createFileIfNotExists() {
+		try {
+			if(!database.exists()) {
+				database.createNewFile();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 
 	public void updateFly(Fly updatedFly) {
 		for (int i = 0; i < flies.size(); i++) {
@@ -48,6 +61,7 @@ public class ViagensRepository {
 				break;
 			}
 		}
+		saveFlies();
 	}
 
 	public Fly getFlyById(int id) {
@@ -65,11 +79,13 @@ public class ViagensRepository {
 
 	public void deleteFly(int id) {
 		flies.removeIf(fly -> fly.getId() == id);
+		saveFlies();
 	}
 
 	public void addFly(Fly fly) {
 		fly.setId(1);
 		flies.add(fly);
+		saveFlies();
 	}
 
 	public int getNextId() {
@@ -85,7 +101,9 @@ public class ViagensRepository {
 	private void saveFlies() {
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(database, false))) {
 			for (Fly fly : flies) {
-				String data = fly.getId() + ";" + fly.getNome() + ";" + fly.getInicioVoo() + ";" + fly.getFimVoo();
+				String data = fly.getId() + ";" + fly.getNome() + ";" 
+						+ fly.getInicioVoo() + ";" + fly.getFimVoo();
+				writer.println(data);
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Arquivo database deletado com sucesso");
