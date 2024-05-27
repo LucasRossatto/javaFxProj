@@ -36,11 +36,10 @@ public class ViagemController {
 
 	@FXML
 	private TextField FimVoo;
-	
+
 	private ObservableList<Fly> data;
 
 	private ViagensRepository FliesRepository;
-
 
 	@FXML
 	public void initialize() {
@@ -84,10 +83,16 @@ public class ViagemController {
 
 	public void cadastrar() {
 		Fly fly = new Fly();
-		fly.setNome(nome.getText());
-		fly.setInicioVoo(InicioVoo.getText());
-		fly.setFimVoo(FimVoo.getText());
-		FliesRepository.addFly(fly);
+		if (nome.getText() == null && InicioVoo.getText() == null && FimVoo.getText() == null) {
+			System.out.println("Erro: Credenciais inválidas");
+		} else {
+			System.out.println("Cadastro feito com sucesso");
+			fly.setNome(nome.getText());
+			fly.setInicioVoo(InicioVoo.getText());
+			fly.setFimVoo(FimVoo.getText());
+			FliesRepository.addFly(fly);
+			ClearFields();
+		}
 	}
 
 	public void ClearFields() {
