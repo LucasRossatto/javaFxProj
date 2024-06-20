@@ -6,11 +6,14 @@ import java.io.IOException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import model.Fly;
 import repository.ViagensRepository;
 
@@ -37,6 +40,12 @@ public class ViagemController {
 	@FXML
 	private TextField FimVoo;
 
+	@FXML
+	private Button cadastrarBtn;
+
+	@FXML
+	private Button clearBtn;
+
 	private ObservableList<Fly> data;
 
 	private ViagensRepository FliesRepository;
@@ -56,6 +65,20 @@ public class ViagemController {
 
 		FliesRepository = new ViagensRepository();
 		carregarDadosSalvos();
+
+		tableView.setOnMouseClicked(this::ClicouComMouse);
+	}
+
+	private void ClicouComMouse(MouseEvent event) {
+		Fly selectedFly = tableView.getSelectionModel().getSelectedItem();
+		if (selectedFly != null) {
+			nome.setText(selectedFly.getNome());
+			InicioVoo.setText(selectedFly.getInicioVoo());
+			FimVoo.setText(selectedFly.getFimVoo());
+
+			cadastrarBtn.setText("Editar");
+			clearBtn.setText("Deletar");
+		}
 	}
 
 	public void carregarDadosSalvos() {
@@ -90,7 +113,16 @@ public class ViagemController {
 			fly.setNome(nome.getText());
 			fly.setInicioVoo(InicioVoo.getText());
 			fly.setFimVoo(FimVoo.getText());
-			FliesRepository.addFly(fly);
+			if (cadastrarBtn.getText().equals("Cadastrar")) {
+				FliesRepository.addFly(fly);
+			} else {
+				Fly selectedFly = tableView.getSelectionModel().getSelectedItem();
+				selectedFly.setNome(fly.getNome());
+				selectedFly.setInicioVoo(fly.getInicioVoo());
+				selectedFly.setFimVoo(fly.getFimVoo());
+				FliesRepository.updateFly(selectedFly);
+				tableView.refresh();
+			}
 			ClearFields();
 		}
 	}
@@ -102,7 +134,17 @@ public class ViagemController {
 	}
 
 	public void limpar() {
-		ClearFields();
+		if (clearBtn.getText().equals("Limpar")) {
+			ClearFields();
+		} else {
+			Fly selectedFly = tableView.getSelectionModel().getSelectedItem();
+			if (selectedFly != null) {
+				data.remove(selectedFly);
+				FliesRepository.deleteFly(selectedFly.getId());
+				ClearFields();
+			}
+		}
+
 	}
 
 }
